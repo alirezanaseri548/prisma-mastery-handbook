@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>جزوه آموزشی Backend - Prisma Mastery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Vazirmatn", Tahoma, sans-serif;
+      line-height: 1.8;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+      color: #222;
+      direction: rtl;
+    }
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
+    h1, h2, h3, h4 {
+      margin-top: 1.4em;
+      margin-bottom: 0.6em;
+      line-height: 1.4;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 0.8em;
+      color: #0c4a6e;
+    }
+    h2 {
+      color: #0369a1;
+      border-right: 4px solid #0ea5e9;
+      padding-right: 8px;
+    }
+    h3 {
+      color: #0f766e;
+    }
+    p {
+      margin: 0.6em 0;
+      text-align: justify;
+    }
+    ul, ol {
+      margin: 0.4em 1.6em 0.8em 0;
+    }
+    code {
+      font-family: "Fira Code", Consolas, monospace;
+      background: #f1f5f9;
+      padding: 2px 4px;
+      border-radius: 4px;
+      direction: ltr;
+    }
+    pre {
+      background: #020617;
+      color: #e5e7eb;
+      padding: 12px 16px;
+      overflow-x: auto;
+      border-radius: 6px;
+      direction: ltr;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    .page-break {
+      page-break-after: always;
+      border-top: 1px dashed #cbd5f5;
+      margin: 40px 0;
+    }
+    .note {
+      background: #ecfeff;
+      border-right: 4px solid #06b6d4;
+      padding: 8px 10px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+    }
+    .warning {
+      background: #fef2f2;
+      border-right: 4px solid #ef4444;
+      padding: 8px 10px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+    }
+    .goal {
+      background: #f0fdf4;
+      border-right: 4px solid #22c55e;
+      padding: 8px 10px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+    }
+    .toc {
+      background: #eff6ff;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .toc ul {
+      margin: 0.2em 1.6em;
+    }
+    .toc a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .toc a:hover {
+      text-decoration: underline;
+    }
+    @media print {
+      body {
+        background: white;
+      }
+      .container {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+      }
+      .page-break {
+        border: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- صفحه 1: جلد و مشخصات جلسه -->
+  <h1>جزوه آموزشی Backend – Prisma Mastery</h1>
+  <p style="text-align:center;">
+    تاریخ جلسه: ۱۴۰۵/۰۳/۲۱ – پنج‌شنبه<br>
+    مدت زمان: ۱۳:۳۰ تا ۱۴:۳۰ (۶۰ دقیقه)<br>
+    موضوع: <strong>Setup Prisma &amp; Advanced Schema Design</strong><br>
+    تمرکز عملی: <strong>ساخت CRUD با Prisma</strong> + <strong>روابط ۱-چند و چند-چند</strong>
+  </p>
+
+  <div class="goal">
+    <strong>اهداف این جلسه:</strong>
+    <ul>
+      <li>نصب و راه‌اندازی Prisma در یک پروژه Node.js/TypeScript</li>
+      <li>طراحی اسکیمای پایگاه‌داده با تأکید بر روابط ۱-n و n-n</li>
+      <li>تولید و استفاده از Prisma Client</li>
+      <li>پیاده‌سازی عملیات CRUD (Create, Read, Update, Delete) با Prisma</li>
+      <li>آمادگی برای کار با چند مدل و روابط پیچیده در پروژه‌های واقعی</li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 2: فهرست مطالب -->
+  <h2 id="toc">فهرست مطالب</h2>
+  <div class="toc">
+    <ul>
+      <li><a href="#intro">۱. مقدمه‌ای بر Prisma و معماری آن</a></li>
+      <li><a href="#setup">۲. راه‌اندازی اولیه Prisma در پروژه</a></li>
+      <li><a href="#schema-basics">۳. آشنایی با Prisma Schema</a></li>
+      <li><a href="#relations-one-many">۴. مدل‌سازی رابطه ۱-چند (1-n)</a></li>
+      <li><a href="#relations-many-many">۵. مدل‌سازی رابطه چند-چند (n-n)</a></li>
+      <li><a href="#migrations">۶. مهاجرت‌ها (Migrations) در Prisma</a></li>
+      <li><a href="#crud">۷. پیاده‌سازی CRUD با Prisma Client</a></li>
+      <li><a href="#advanced">۸. کوئری‌های پیشرفته و چند مدل همزمان</a></li>
+      <li><a href="#patterns">۹. الگوهای متداول در Backend با Prisma</a></li>
+      <li><a href="#checklist">۱۰. چک‌لیست «Prisma Ready» برای پروژه</a></li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 3-4: مقدمه -->
+  <h2 id="intro">۱. مقدمه‌ای بر Prisma</h2>
+  <h3>۱.۱. Prisma چیست؟</h3>
+  <p>
+    Prisma یک ORM مدرن برای Node.js و TypeScript است که کار با پایگاه‌داده‌های رابطه‌ای
+    (مثل PostgreSQL، MySQL، SQL Server و SQLite) را ساده، امن و تایپ‌سیف می‌کند.
+  </p>
+  <ul>
+    <li><strong>Prisma Client:</strong> لایبرری تایپ‌سیف برای کوئری‌زدن از داخل کد</li>
+    <li><strong>Prisma Migrate:</strong> ابزار مدیریت مهاجرت (اسکیمای دیتابیس)</li>
+    <li><strong>Prisma Studio:</strong> UI ساده برای مشاهده و مدیریت داده‌ها</li>
+  </ul>
+
+  <h3>۱.۲. چرا Prisma؟</h3>
+  <ul>
+    <li>تایپ‌سیف: خطاهای کوئری در زمان کامپایل مشخص می‌شوند.</li>
+    <li>Developer Experience عالی: تکمیل خودکار، اسکیما واضح، مستندات قوی.</li>
+    <li>پیاده‌سازی راحت روابط پیچیده: ۱-۱، ۱-n، n-n.</li>
+    <li>ادغام آسان با فریم‌ورک‌هایی مثل NestJS، Express، Next.js و …</li>
+  </ul>
+
+  <div class="note">
+    <strong>نکته:</strong> Prisma جایگزین SQL نیست؛ در واقع یک لایه روی دیتابیس است که
+    بسیاری از جزئیات کم‌اهمیت ولی تکراری را از دوش برنامه‌نویس برمی‌دارد.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 5-7: Setup -->
+  <h2 id="setup">۲. راه‌اندازی اولیه Prisma در پروژه</h2>
+
+  <h3>۲.۱. پیش‌نیازها</h3>
+  <ul>
+    <li>نصب Node.js (ترجیحاً نسخه LTS)</li>
+    <li>آشنایی اولیه با TypeScript (اختیاری ولی توصیه‌شده)</li>
+    <li>داشتن یک دیتابیس نمونه (مثلاً PostgreSQL یا SQLite)</li>
+  </ul>
+
+  <h3>۲.۲. ایجاد پروژه پایه</h3>
+  <pre>
+// پوشه پروژه
+mkdir prisma-mastery
+cd prisma-mastery
+
+// مقداردهی اولیه Node.js
+npm init -y
+
+// نصب TypeScript و ابزارهای مرتبط (اختیاری ولی پیشنهاد‌شده)
+npm install --save-dev typescript ts-node @types/node
+npx tsc --init
+  </pre>
+
+  <h3>۲.۳. نصب Prisma و Prisma Client</h3>
+  <pre>
+// نصب Prisma CLI و Prisma Client
+npm install prisma --save-dev
+npm install @prisma/client
+
+// مقداردهی اولیه Prisma
+npx prisma init
+  </pre>
+
+  <p>
+    دستور <code>npx prisma init</code> یک پوشه <code>prisma/</code> و فایل
+    <code>schema.prisma</code> و همچنین یک فایل <code>.env</code> ایجاد می‌کند.
+  </p>
+
+  <h3>۲.۴. تنظیم اتصال به دیتابیس (DATABASE_URL)</h3>
+  <p>در فایل <code>.env</code> آدرس اتصال به دیتابیس را تنظیم می‌کنیم:</p>
+  <pre>
+DATABASE_URL="postgresql://user:password@localhost:5432/prisma_mastery?schema=public"
+  </pre>
+
+  <p>در فایل <code>prisma/schema.prisma</code> دیتابیس را مشخص می‌کنیم:</p>
+  <pre>
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+  </pre>
+
+  <div class="warning">
+    <strong>هشدار:</strong> اطلاعات حساس (یوزرنیم، پسورد) را هرگز در گیت پابلیک قرار ندهید.
+    فایل <code>.env</code> را در <code>.gitignore</code> قرار دهید.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 8-10: Prisma Schema Basics -->
+  <h2 id="schema-basics">۳. آشنایی با Prisma Schema</h2>
+
+  <h3>۳.۱. ساختار کلی schema.prisma</h3>
+  <p>این فایل معمولا شامل سه بخش است:</p>
+  <ol>
+    <li><strong>datasource</strong>: تنظیمات دیتابیس</li>
+    <li><strong>generator</strong>: خروجی‌های تولیدشده (مثلاً Prisma Client)</li>
+    <li><strong>model</strong>: تعریف مدل‌ها (که به جدول‌های دیتابیس نگاشت می‌شوند)</li>
+  </ol>
+
+  <h3>۳.۲. یک مدل ساده User</h3>
+  <pre>
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+}
+  </pre>
+
+  <p>نکات:</p>
+  <ul>
+    <li><code>@id</code> فیلد را به عنوان کلید اصلی مشخص می‌کند.</li>
+    <li><code>@default(autoincrement())</code> مقدار خودکار را برای فیلدهای عددی ایجاد می‌کند.</li>
+    <li><code>@unique</code> یعنی مقدار این فیلد در جدول یکتا است.</li>
+    <li><code>String?</code> یعنی این فیلد Nullable (اختیاری) است.</li>
+  </ul>
+
+  <h3>۳.۳. انواع داده متداول در Prisma</h3>
+  <ul>
+    <li><code>Int</code> ،<code>BigInt</code></li>
+    <li><code>String</code></li>
+    <li><code>Boolean</code></li>
+    <li><code>DateTime</code></li>
+    <li><code>Float</code> ،<code>Decimal</code></li>
+    <li><code>Json</code></li>
+  </ul>
+
+  <div class="note">
+    <strong>نکته:</strong> می‌توان برای هر دیتابیس، نوع‌های خاص خودش را هم استفاده کرد
+    (مثل <code>@db.VarChar(255)</code>).
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 11-16: روابط 1-n -->
+  <h2 id="relations-one-many">۴. مدل‌سازی رابطه ۱-چند (1-n)</h2>
+
+  <h3>۴.۱. سناریو: User و Post</h3>
+  <p>
+    یک کاربر (<code>User</code>) می‌تواند چند پست (<code>Post</code>) داشته باشد.
+    یعنی رابطه‌ی ۱-چند بین User و Post.
+  </p>
+
+  <h3>۴.۲. تعریف مدل‌ها</h3>
+  <pre>
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String?
+
+  posts Post[]  // 1-n: یک کاربر، چند پست
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+}
+  </pre>
+
+  <p>نکات مهم:</p>
+  <ul>
+    <li>در مدل <code>User</code> یک آرایه <code>Post[]</code> داریم که سمت «۱» را نشان می‌دهد.</li>
+    <li>در مدل <code>Post</code> یک فیلد <code>authorId</code> به عنوان کلید خارجی داریم.</li>
+    <li>با <code>@relation</code> مشخص می‌کنیم که کدام فیلد کلید خارجی است و به کدام فیلد در مدل دیگر اشاره می‌کند.</li>
+  </ul>
+
+  <h3>۴.۳. خوانایی و نام‌گذاری روابط</h3>
+  <p>در صورت داشتن چند رابطه بین دو مدل، باید نام رابطه را مشخص کنیم:</p>
+  <pre>
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+
+  posts     Post[]  @relation("UserPosts")
+  comments  Comment[] @relation("UserComments")
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+
+  authorId  Int
+  author    User    @relation("UserPosts", fields: [authorId], references: [id])
+
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int     @id @default(autoincrement())
+  text      String
+
+  authorId  Int
+  author    User    @relation("UserComments", fields: [authorId], references: [id])
+
+  postId    Int
+  post      Post    @relation(fields: [postId], references: [id])
+}
+  </pre>
+
+  <div class="note">
+    <strong>نکته:</strong> نام‌گذاری روابط کمک می‌کند از خطاهای «ambiguous relation» در زمان
+    <code>prisma generate</code> یا <code>prisma migrate</code> جلوگیری شود.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 17-22: روابط n-n -->
+  <h2 id="relations-many-many">۵. مدل‌سازی رابطه چند-چند (n-n)</h2>
+
+  <h3>۵.۱. سناریو: Post و Tag</h3>
+  <p>
+    هر پست می‌تواند چند تگ داشته باشد، و هر تگ می‌تواند روی چند پست اعمال شود:
+    این یک رابطه‌ی n-n است.
+  </p>
+
+  <h3>۵.۲. رابطه چند-چند ضمنی (Implicit Many-to-Many)</h3>
+  <pre>
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+
+  tags      Tag[]   // n-n
+}
+
+model Tag {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+
+  posts  Post[]
+}
+  </pre>
+
+  <p>
+    Prisma به‌صورت خودکار یک جدول واسط (join table) ایجاد می‌کند
+    (مثلاً <code>_PostToTag</code>) که دو کلید خارجی دارد.
+  </p>
+
+  <h3>۵.۳. رابطه چند-چند صریح (Explicit Many-to-Many)</h3>
+  <p>
+    وقتی بخواهیم روی رابطه، فیلد اضافه داشته باشیم (مثلاً تاریخ ایجاد، یا وزن/اولویت)،
+    باید جدول واسط را خودمان تعریف کنیم:
+  </p>
+  <pre>
+model Post {
+  id         Int           @id @default(autoincrement())
+  title      String
+
+  postTags   PostTag[]
+}
+
+model Tag {
+  id         Int           @id @default(autoincrement())
+  name       String        @unique
+
+  postTags   PostTag[]
+}
+
+model PostTag {
+  id        Int     @id @default(autoincrement())
+  postId    Int
+  tagId     Int
+
+  // فیلدهای اضافه روی رابطه
+  createdAt DateTime @default(now())
+  weight    Int      @default(1)
+
+  post      Post   @relation(fields: [postId], references: [id])
+  tag       Tag    @relation(fields: [tagId], references: [id])
+
+  @@unique([postId, tagId])
+}
+  </pre>
+
+  <div class="note">
+    <strong>نکته:</strong> در پروژه‌های واقعی، رابطه n-n صریح بسیار رایج است؛
+    چون معمولاً روی ارتباط هم متادیتا (مثل زمان برچسب‌گذاری) نیاز داریم.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 23-26: Migrations -->
+  <h2 id="migrations">۶. مهاجرت‌ها (Migrations) در Prisma</h2>
+
+  <h3>۶.۱. ایجاد اولین مایگریشن</h3>
+  <p>پس از تعریف مدل‌ها در <code>schema.prisma</code>، با دستور زیر اولین مایگریشن را ایجاد می‌کنیم:</p>
+  <pre>
+npx prisma migrate dev --name init
+  </pre>
+
+  <p>
+    این دستور:
+  </p>
+  <ul>
+    <li>یک پوشه <code>prisma/migrations</code> می‌سازد.</li>
+    <li>SQL متناظر با مدل‌ها را تولید و روی دیتابیس اعمال می‌کند.</li>
+    <li>Prisma Client را دوباره تولید می‌کند.</li>
+  </ul>
+
+  <h3>۶.۲. به‌روزرسانی اسکیمای دیتابیس</h3>
+  <p>فرض کنید فیلد جدیدی به مدل Post اضافه می‌کنیم:</p>
+  <pre>
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+
+  // فیلد جدید:
+  slug      String   @unique
+}
+  </pre>
+
+  <p>سپس مایگریشن جدید اجرا می‌کنیم:</p>
+  <pre>
+npx prisma migrate dev --name add-slug-to-post
+  </pre>
+
+  <h3>۶.۳. Prisma Studio برای بررسی داده‌ها</h3>
+  <p>
+    برای بررسی سریع داده‌ها و تست CRUD، از Prisma Studio استفاده می‌کنیم:
+  </p>
+  <pre>
+npx prisma studio
+  </pre>
+
+  <p>یک UI تحت وب باز می‌شود که در آن می‌توان رکوردها را مشاهده/ایجاد/ویرایش کرد.</p>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 27-34: CRUD -->
+  <h2 id="crud">۷. پیاده‌سازی CRUD با Prisma Client</h2>
+
+  <h3>۷.۱. تولید Prisma Client</h3>
+  <p>
+    هر بار که <code>npx prisma migrate dev</code> را اجرا می‌کنیم،
+    به‌طور خودکار Prisma Client هم regenerate می‌شود.  
+    برای تولید دستی:
+  </p>
+  <pre>
+npx prisma generate
+  </pre>
+
+  <h3>۷.۲. ایجاد یک فایل entry point</h3>
+  <p>برای تست ساده CRUD، یک فایل <code>src/index.ts</code> (یا <code>index.js</code>) می‌سازیم:</p>
+  <pre>
+// src/index.ts
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  // TODO: CRUD operations
+}
+
+main()
+  .catch(e =&gt; {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () =&gt; {
+    await prisma.$disconnect()
+  })
+  </pre>
+
+  <h3>۷.۳. Create (ایجاد)</h3>
+  <pre>
+// ایجاد یک کاربر جدید
+const user = await prisma.user.create({
+  data: {
+    email: 'user1@example.com',
+    name: 'User One',
+  },
+})
+
+// ایجاد یک پست مرتبط با این کاربر (۱-n)
+const post = await prisma.post.create({
+  data: {
+    title: 'اولین پست با Prisma',
+    content: 'متن نمونه...',
+    author: {
+      connect: { id: user.id },
+    },
+  },
+})
+  </pre>
+
+  <h3>۷.۴. Read (خواندن)</h3>
+  <pre>
+// یافتن یک کاربر با ایمیل خاص
+const user = await prisma.user.findUnique({
+  where: { email: 'user1@example.com' },
+})
+
+// یافتن یک کاربر همراه با پست‌ها
+const userWithPosts = await prisma.user.findUnique({
+  where: { id: 1 },
+  include: {
+    posts: true,
+  },
+})
+
+// دریافت لیست پست‌ها با فیلتر و مرتب‌سازی
+const posts = await prisma.post.findMany({
+  where: {
+    published: true,
+    title: { contains: 'Prisma' },
+  },
+  orderBy: {
+    createdAt: 'desc',
+  },
+  take: 10,
+})
+  </pre>
+
+  <h3>۷.۵. Update (به‌روزرسانی)</h3>
+  <pre>
+// به‌روزرسانی یک پست
+const updatedPost = await prisma.post.update({
+  where: { id: 1 },
+  data: {
+    title: 'عنوان جدید برای پست',
+    published: true,
+  },
+})
+  </pre>
+
+  <h3>۷.۶. Delete (حذف)</h3>
+  <pre>
+// حذف یک پست
+const deletedPost = await prisma.post.delete({
+  where: { id: 1 },
+})
+  </pre>
+
+  <div class="note">
+    <strong>نکته:</strong> اگر روابط و محدودیت‌های foreign key به‌درستی تنظیم شده باشند،
+    هنگام حذف رکورد، ممکن است خطا دریافت کنید (مثلاً اگر رکورد فرزند هنوز موجود باشد).
+    برای این موارد باید استراتژی حذف (cascade / restrict) را در دیتابیس و مدل‌ها مشخص کنید.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 35-37: کوئری‌های پیشرفته / چند مدل -->
+  <h2 id="advanced">۸. کوئری‌های پیشرفته و چند مدل همزمان</h2>
+
+  <h3>۸.۱. nested write (نوشتن تو در تو)</h3>
+  <p>در Prisma می‌توان در یک عملیات، هم‌زمان چند مدل مرتبط را ذخیره کرد:</p>
+  <pre>
+// ایجاد کاربر به همراه پست و تگ‌های آن (رابطه n-n)
+const createdUser = await prisma.user.create({
+  data: {
+    email: 'nested@example.com',
+    name: 'Nested Example',
+    posts: {
+      create: [
+        {
+          title: 'پست همراه با تگ',
+          content: '...',
+          tags: {
+            create: [
+              { name: 'prisma' },
+              { name: 'backend' },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  include: {
+    posts: {
+      include: { tags: true },
+    },
+  },
+})
+  </pre>
+
+  <h3>۸.۲. Selection و Projection</h3>
+  <p>برای کاهش حجم داده، می‌توانیم فقط فیلدهای مورد نیاز را انتخاب کنیم:</p>
+  <pre>
+const posts = await prisma.post.findMany({
+  select: {
+    id: true,
+    title: true,
+    author: {
+      select: {
+        id: true,
+        email: true,
+      },
+    },
+  },
+})
+  </pre>
+
+  <h3>۸.۳. Pagination ساده</h3>
+  <pre>
+const page = 1
+const pageSize = 10
+
+const posts = await prisma.post.findMany({
+  skip: (page - 1) * pageSize,
+  take: pageSize,
+  orderBy: { createdAt: 'desc' },
+})
+  </pre>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 38-39: الگوها و بهترین تجربیات -->
+  <h2 id="patterns">۹. الگوهای متداول در Backend با Prisma</h2>
+
+  <h3>۹.۱. ساختار لایه‌ای (Layered Architecture)</h3>
+  <ul>
+    <li><strong>Layer Controller/Route:</strong> دریافت درخواست HTTP، اعتبارسنجی اولیه</li>
+    <li><strong>Service Layer:</strong> منطق کسب‌وکار، استفاده از Prisma Client</li>
+    <li><strong>Data Access Layer (اختیاری):</strong> wrapperهای مشخص برای عملیات CRUD</li>
+  </ul>
+
+  <h3>۹.۲. مدیریت lifecycle PrismaClient</h3>
+  <ul>
+    <li>در اکثر پروژه‌ها یک <code>PrismaClient</code> singleton ساخته و در کل برنامه استفاده می‌شود.</li>
+    <li>در فریم‌ورک‌هایی مانند NestJS، PrismaClient به‌صورت یک Provider ثبت می‌شود.</li>
+  </ul>
+
+  <h3>۹.۳. نکات عملکردی (Performance)</h3>
+  <ul>
+    <li>استفاده از <code>select</code> و <code>include</code> به‌صورت مینیمال</li>
+    <li>پرهیز از n+1 query با استفاده از <code>include</code> مناسب</li>
+    <li>استفاده از indexها در دیتابیس برای فیلترهای پرتکرار</li>
+  </ul>
+
+  <div class="note">
+    <strong>نکته:</strong> در پروژه‌های بزرگ، طرح‌ریزی دقیق روابط (به‌خصوص ۱-n و n-n) و
+    طراحی اسکیمای درست، تأثیر مستقیم روی عملکرد و سادگی توسعه دارد.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- صفحه 40: چک‌لیست نهایی -->
+  <h2 id="checklist">۱۰. چک‌لیست «Prisma Ready» برای پروژه</h2>
+
+  <p>برای اطمینان از اینکه پروژه‌ی شما از نظر Prisma آماده است، آیتم‌های زیر را بررسی کنید:</p>
+  <ul>
+    <li>☑ فایل <code>.env</code> تنظیم و <code>DATABASE_URL</code> صحیح است.</li>
+    <li>☑ فایل <code>schema.prisma</code> حداقل شامل یک مدل پایه (مثلاً User) است.</li>
+    <li>☑ روابط ۱-n بین مدل‌های اصلی (مثل User-Post) به‌درستی تعریف شده‌اند.</li>
+    <li>☑ روابط n-n مورد نیاز، با توجه به نیاز پروژه (implicit یا explicit) طراحی شده‌اند.</li>
+    <li>☑ حداقل یک مایگریشن (<code>prisma migrate dev</code>) با موفقیت اجرا شده است.</li>
+    <li>☑ Prisma Client بدون خطا تولید می‌شود (<code>prisma generate</code>).</li>
+    <li>☑ تست CRUD برای مهم‌ترین مدل‌ها انجام شده است.</li>
+    <li>☑ از Prisma Studio برای بررسی داده‌ها استفاده و ساختار روابط را تأیید کرده‌اید.</li>
+    <li>☑ الگوی مناسب برای استفاده از <code>PrismaClient</code> در کل پروژه مشخص شده است.</li>
+  </ul>
+
+  <p>
+    با انجام این چک‌لیست، می‌توانید مطمئن باشید که پروژه‌ی Backend شما از نظر کار با Prisma،
+    برای توسعه‌ی سریع و افزودن فیچرهای جدید آماده است.
+  </p>
+
+  <hr>
+  <p style="font-size:0.9rem; text-align:center; margin-top:20px;">
+    پایان جزوه مختصر «Backend – Prisma Mastery»<br>
+    این فایل را می‌توانید به‌عنوان پایه‌ی جزوه ۴۰ صفحه‌ای توسعه داده و فصل‌ها را با جزئیات،
+    مثال‌های بیشتر و تمرین‌های عملی تکمیل کنید.
+  </p>
+
+</div>
+</body>
+</html>
